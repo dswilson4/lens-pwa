@@ -34,9 +34,9 @@ export async function POST(request: NextRequest) {
     }
 
     const newUser: User = {
-        id: Date.now(),
         walletAddress: parsedBody.walletAddress,
         contractAddress: parsedBody.contractAddress,
+        createdAt: Date.now(),
     };
 
     users.push(newUser);
