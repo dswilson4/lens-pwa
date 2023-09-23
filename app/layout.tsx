@@ -8,13 +8,14 @@ import { ModeToggle } from '@/components/dropdown'
 import { ChevronRight, Tally3 as IconComponent, LogOut, ArrowBigDownDash } from "lucide-react"
 import { Button } from '@/components/ui/button'
 import { usePathname } from 'next/navigation'
-import { usePrivy } from '@privy-io/react-auth'
+import { ConnectedWallet, usePrivy } from '@privy-io/react-auth'
 import { useState, useEffect } from 'react'
 // import { useWalletLogin } from '@lens-protocol/react-web';
 import { useLogin } from '@privy-io/react-auth';
 import { useWallets } from '@privy-io/react-auth'
 // import LensProvider from './LensProvider'
 import PrivyProvider from './PrivyProvider'
+import {usePrivyWagmi} from '@privy-io/wagmi-connector';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -51,6 +52,24 @@ function Nav() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>()
   // const { execute: loginWithLens } = useWalletLogin()
   const { wallets } = useWallets()
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const {wallet: activeWallet, setActiveWallet} = usePrivyWagmi();
+  const [walletAddress, setWalletAddress] = useState(activeWallet?.address ? activeWallet?.address : "Connect Wallet Please");
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+  const handleWalletSelection = (wallet: ConnectedWallet) => {
+    wallet.switchChain(1337);
+    setActiveWallet(wallet);
+    setIsDropdownOpen(false); // Close the dropdown after selection if needed
+  };
+  
+  useEffect(() => {
+    if (!wallets) {
+      setWalletAddress("Connect Wallet Please");
+    }
+  }, [wallets])
+  
 
   const { login } = useLogin({
     onComplete: async user => {
@@ -126,6 +145,29 @@ function Nav() {
         sm:items-center
         pl-4 pb-3 sm:p-0
       '>
+        {/* Put dropdown here that shows all wallets in wallets like wallets.map((wallet) => RETURN CLICKABLE COMPONENT) */}
+        <div className="relative">
+          <button
+            onClick={toggleDropdown}
+            className="text-sm focus:outline-none"
+          >
+            {activeWallet ? activeWallet.address : 'Select Wallet'}
+            <ChevronRight className="h-4 w-4 ml-2" />
+          </button>
+          {isDropdownOpen && (
+            <div className="absolute mt-2 p-2 bg-white border rounded shadow-lg">
+              {wallets.map((wallet) => (
+                <div
+                  key={wallet.address}
+                  onClick={() => handleWalletSelection(wallet)}
+                  className="cursor-pointer hover:bg-gray-100 p-2"
+                >
+                  {wallet.address}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
         {
           !user && (
             <Button onClick={login} variant="secondary" className="mr-2">

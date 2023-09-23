@@ -1,7 +1,19 @@
 'use client'
 
 import { PrivyProvider } from '@privy-io/react-auth'
+import { PrivyWagmiConnector } from '@privy-io/wagmi-connector';
 import {foundry, localhost} from '@wagmi/chains';
+import { configureChains } from 'wagmi';
+// import { infuraProvider } from "wagmi/providers/infura";
+import { publicProvider } from "wagmi/providers/public";
+
+
+const configureChainsConfig = configureChains(
+  [foundry],
+  [
+    publicProvider()
+  ]
+)
 
 
 export default function Provider({
@@ -26,9 +38,12 @@ export default function Provider({
           //     1337 : "http://127.0.0.1:8545",
           // }
           // },
-          additionalChains: [foundry, localhost]
+          additionalChains: [foundry]
         }}>
+                <PrivyWagmiConnector wagmiChainsConfig={configureChainsConfig}>
+
            {children}
+           </PrivyWagmiConnector>
       </PrivyProvider>
     )
 }

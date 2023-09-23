@@ -4,7 +4,7 @@ import { polygonMumbai, polygon } from 'wagmi/chains'
 import { configureChains, createConfig, WagmiConfig } from 'wagmi'
 import { publicProvider } from 'wagmi/providers/public'
 import { InjectedConnector } from 'wagmi/connectors/injected'
-import { LensProvider, production } from '@lens-protocol/react-web'
+// import { LensProvider, production } from '@lens-protocol/react-web'
 import { ConnectedWallet, useWallets } from '@privy-io/react-auth'
 import { useRef } from 'react'
 import { useEffect } from 'react'
@@ -52,14 +52,13 @@ export default function Provider({ children }: {
         return await provider.getSigner()
       }
     },
-    environment: production
   }
 
   return (
     <WagmiConfig config={config}>
-      <LensProvider config={privyConfig}>
+      {/* <LensProvider config={privyConfig}> */}
         {children}
-      </LensProvider>
+      {/* </LensProvider> */}
     </WagmiConfig>
   )
 }

@@ -1,5 +1,5 @@
 import { usePrivy, useWallets } from '@privy-io/react-auth';
-import { ethers } from "ethers";
+import { ethers, formatEther } from "ethers";
 import { useState } from 'react';
 import {ShareSample__factory} from '../typechain/factories/ShareSample__factory';
 
@@ -26,10 +26,10 @@ const sampleChain = 1337;
 
     if (signer) {
       const address = await signer.getAddress(); // Get the wallet address
-      const balance = await provider?.getBalance(address); // Get the balance
+      const balance = (await provider?.getBalance(address))?.toHexString(); // Get the balance
       console.log(`Wallet Address: ${address}`);
-      console.log(`Balance: ${balance ? ethers.utils.formatEther(balance) : 'NONE'} ETH`);
-      setWalletBalance(`${balance ? ethers.utils.formatEther(balance) : 'NONE'} ETH`)
+      console.log(`Balance: ${balance ? formatEther(balance) : 'NONE'} ETH`);
+      setWalletBalance(`${balance ? formatEther(balance) : 'NONE'} ETH`)
     }
 
   }

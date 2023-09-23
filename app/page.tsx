@@ -1,16 +1,6 @@
 'use client'
 import { useState } from 'react'
 import {
-  useExploreProfiles,
-  useExplorePublications,
-  PublicationTypes,
-  PublicationSortCriteria,
-  PublicationMainFocus,
-  useReaction,
-  useActiveProfile,
-  ReactionType
-} from '@lens-protocol/react-web'
-import {
   Loader2,
   ListMusic,
   Newspaper,
