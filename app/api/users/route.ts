@@ -35,12 +35,24 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ message: 'Missing walletAddress or contractAddress.' }, { status: 400 });
     }
 
-    const newUser: User = {
+    const newUserModel: User = {
         id: Date.now(),
         walletAddress: parsedBody.walletAddress,
         contractAddress: parsedBody.contractAddress,
     };
 
-    users.push(newUser);
-    return NextResponse.json(newUser, { status: 201 });
+    try {
+        const newUser = await prisma.user.create({
+            data: {
+                walletAddress: newUserModel.walletAddress,
+                contractAddress: newUserModel.contractAddress,
+            }
+        });
+        console.log(newUserModel);
+        return NextResponse.json(newUser, { status: 201 });
+
+    } catch (error) {
+        // @ts-ignore
+        return NextResponse.json({ message: `Failed to create new User: ${error.message}` }, { status: 500 });
+    }
 }
