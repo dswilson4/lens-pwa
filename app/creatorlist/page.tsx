@@ -21,6 +21,8 @@ const CreatorsList = () => {
     // Add more creators as needed
   ];
 
+//   const datas = 
+
   return (
     <main className="px-10 py-14">
       <h1 className="text-3xl font-semibold text-blue-500">Creators List</h1>
