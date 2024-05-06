@@ -17,8 +17,6 @@ export async function POST(request: NextRequest) {
     if ( !creatorWalletAddress || !subscriberWalletAddress ) {
         return NextResponse.json({ message: 'creatorWalletAddress and subscriberWalletAddress are required fields.' }, { status: 400 });
     }
-    console.log(creatorWalletAddress)
-    console.log(subscriberWalletAddress)
 
     try {
         // Check for Subscription mapping
@@ -33,9 +31,8 @@ export async function POST(request: NextRequest) {
           },
         });
 
-        console.log(subscription.length)
         if ( subscription.length > 0 ) {
-            console.log(`Succesfully discovered for subscriber ${subscriberWalletAddress} to ${creatorWalletAddress}`);
+            console.log(`Succesfully discovered subscription for subscriber ${subscriberWalletAddress} to ${creatorWalletAddress}`);
 
             const media = await prisma.media.findMany({
               where: {
@@ -44,9 +41,6 @@ export async function POST(request: NextRequest) {
                 },
               },
             });
-
-            console.log("Media objects");
-            console.log(media);
         } else {
             console.log(`No subscription found for ${subscriberWalletAddress} to ${creatorWalletAddress}`);
         }

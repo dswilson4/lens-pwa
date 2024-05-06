@@ -40,6 +40,7 @@ export async function POST(request: NextRequest) {
         walletAddress: parsedBody.walletAddress,
         contractAddress: parsedBody.contractAddress,
     };
+    console.log(newUserModel)
 
     try {
         const newUser = await prisma.user.create({
@@ -48,7 +49,6 @@ export async function POST(request: NextRequest) {
                 contractAddress: newUserModel.contractAddress,
             }
         });
-        console.log(newUserModel);
         return NextResponse.json(newUser, { status: 201 });
 
     } catch (error) {
